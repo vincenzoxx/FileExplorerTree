@@ -13,7 +13,7 @@ namespace FileExplorerTree.Models
     {
         public enum FileSizeLabel
         {
-            Byte = 2,
+            Byte,
             KB,
             MB,
             GB,
@@ -30,19 +30,20 @@ namespace FileExplorerTree.Models
             {
                 num = -1;
             }
-            int powCounter = 2;
+            int powCounter = 1;
             while (true)
             {
                 if (Math.Round((num / Math.Pow(1024f, powCounter))) == 0)
                 {
+                    powCounter--;
                     break;
                 }
                 powCounter++;
             }
-            if(powCounter < 3)
-                return Math.Round((num / Math.Pow(1024f, powCounter-1))).ToString("N0") + " " + (FileSizeLabel)(powCounter);
+            if(powCounter < 2)
+                return num == 0 ? "" : Math.Round((num / Math.Pow(1024f, powCounter))).ToString("N0") + " " + (FileSizeLabel)(powCounter);
             else
-                return (num / Math.Pow(1024f, powCounter-1)).ToString("N2") + " " + (FileSizeLabel)(powCounter+1);
+                return (num / Math.Pow(1024f, powCounter)).ToString("N2") + " " + (FileSizeLabel)(powCounter);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

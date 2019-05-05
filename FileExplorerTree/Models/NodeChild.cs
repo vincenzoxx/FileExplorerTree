@@ -50,7 +50,18 @@ namespace FileExplorerTree.Models
                 this.OnPropertyChanged("TypeOfNode");
             }
         }
-
+        private bool _isExpanded;
+        public bool IsExpanded
+        {
+            get { return this._isExpanded; }
+            set
+            {
+                this._isExpanded = value;
+                this.OnPropertyChanged("IsExpanded");
+                if(value) this.GetChildren();
+            }
+        }
+        
 
         private string _currentName;
         public string CurrentName
@@ -151,23 +162,30 @@ namespace FileExplorerTree.Models
             {
                 Children = new ObservableCollection<NodeChild>();
             }
-
-            if (Directory.Exists(this.CurrentNode) && !Children.Any())
+            this.CleanList();
+            if (!Directory.Exists(this.CurrentNode)) return;
+            try
             {
-                try
-                {
-                    Directory.GetFiles(this.CurrentNode).Select(s => new NodeChild(s)).ToList().ForEach(s => Children.Add(s));
-                    Directory.GetDirectories(this.CurrentNode).Select(s => new NodeChild(s)).ToList().ForEach(s => Children.Add(s));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Something happened!");
-                }
-
+                Directory.GetFiles(this.CurrentNode).Where(s => Children.All(cd => cd.CurrentNode != s)).Select(s => new NodeChild(s)).ToList().ForEach(s => Children.Add(s));
+                Directory.GetDirectories(this.CurrentNode).Where(s => Children.All(cd => cd.CurrentNode != s)).Select(s => new NodeChild(s)).ToList().ForEach(s => Children.Add(s));
+            }
+            catch (Exception ex)
+            {
+                this.IsExpanded = false;
+                MessageBox.Show(ex.Message);
             }
 
             this.OnPropertyChanged("Children");
         }
-           
+        private void CleanList()
+        {
+            var missingFiles = Children.Select((cd, index) => new { cd, index }).Where(cd => cd.cd.TypeOfNode == TypeOfNode.Directory ? !Directory.Exists(cd.cd.CurrentNode) : !File.Exists(cd.cd.CurrentNode));
+            if (missingFiles.Any())
+            {
+                missingFiles.ToList().ForEach(tm => Children.RemoveAt(tm.index));
+                this.OnPropertyChanged("Children");
+            }
+        }
+
     }
 }

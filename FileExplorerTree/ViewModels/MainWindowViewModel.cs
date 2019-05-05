@@ -75,18 +75,16 @@ namespace FileExplorerTree.ViewModels
         }
         public void OnMouseDoubleClickAction(NodeChild dataContext)
         {
-            if (dataContext.TypeOfNode == TypeOfNode.File || dataContext.TypeOfNode == TypeOfNode.File)
-                System.Diagnostics.Process.Start(dataContext.CurrentNode);
-            else
-                dataContext.GetChildren();
+            switch (dataContext.TypeOfNode)
+            {
+                case TypeOfNode.File:
+                    System.Diagnostics.Process.Start(dataContext.CurrentNode);
+                    break;
+                default:
+                    break;
+            }
         }
-        public void OnCheckedAction(NodeChild dataContext)
-        {
-            if (dataContext.TypeOfNode == TypeOfNode.File || dataContext.TypeOfNode == TypeOfNode.File)
-                System.Diagnostics.Process.Start(dataContext.CurrentNode);
-            else
-                dataContext.GetChildren();
-        }
+        
         public void OnSelectionChangedAction()
         {
             string path = SelectedDrive.RootDirectory.ToString();
