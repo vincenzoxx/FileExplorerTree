@@ -80,6 +80,13 @@ namespace FileExplorerTree.ViewModels
             else
                 dataContext.GetChildren();
         }
+        public void OnCheckedAction(NodeChild dataContext)
+        {
+            if (dataContext.TypeOfNode == TypeOfNode.File || dataContext.TypeOfNode == TypeOfNode.File)
+                System.Diagnostics.Process.Start(dataContext.CurrentNode);
+            else
+                dataContext.GetChildren();
+        }
         public void OnSelectionChangedAction()
         {
             string path = SelectedDrive.RootDirectory.ToString();
