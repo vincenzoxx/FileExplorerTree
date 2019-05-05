@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using static FileExplorerTree.Models.NodeChild;
 
 namespace FileExplorerTree.ViewModels
 {
@@ -69,10 +70,15 @@ namespace FileExplorerTree.ViewModels
         public void OnMainWindowLoadedAction()
         {
             this.MyDrives = DriveInfo.GetDrives();
+            
+
         }
         public void OnMouseDoubleClickAction(NodeChild dataContext)
         {
-            dataContext.GetChildren();
+            if (dataContext.TypeOfNode == TypeOfNode.File || dataContext.TypeOfNode == TypeOfNode.File)
+                System.Diagnostics.Process.Start(dataContext.CurrentNode);
+            else
+                dataContext.GetChildren();
         }
         public void OnSelectionChangedAction()
         {

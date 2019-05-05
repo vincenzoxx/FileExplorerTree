@@ -177,12 +177,9 @@
                             <Image Height="16" Width="16" Source="{Binding CurrentBitmap}"/>
                             <Label Content="{Binding CurrentName}"/>
                         </StackPanel>
-                        <StackPanel Grid.Column="2" Orientation="Horizontal">
-                            <Label Content="{Binding FileSize, Converter={StaticResource ByteToKBConverter}}" Margin="0,0,0,5"/>
-                            <Label Content="KB" Margin="0,0,0,5"/>
-                        </StackPanel>
-                        
-                        
+                        <Label
+                            Grid.Column="2"
+                            Content="{Binding FileSize, Converter={StaticResource ByteToKBConverter}}" Margin="0,0,0,5"/>
 
                     </Grid>
                 </HierarchicalDataTemplate>

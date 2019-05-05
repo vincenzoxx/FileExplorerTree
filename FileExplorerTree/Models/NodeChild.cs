@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -87,8 +88,12 @@ namespace FileExplorerTree.Models
         private ObservableCollection<NodeChild> _children;
         public ObservableCollection<NodeChild> Children
         {
-            get => _children;
-            set => _children = value;
+            get { return this._children; }
+            set
+            {
+                this._children = value;
+                this.OnPropertyChanged("Children");
+            }
         }
         public NodeChild(string path)
         {
@@ -137,13 +142,15 @@ namespace FileExplorerTree.Models
             
             this.FileSize = info.Length;
         }
-        public void GetChildren()
+        
+        
+        public async void GetChildren()
         {
+
             if (Children == null)
             {
                 Children = new ObservableCollection<NodeChild>();
             }
-            
 
             if (Directory.Exists(this.CurrentNode) && !Children.Any())
             {
@@ -156,11 +163,11 @@ namespace FileExplorerTree.Models
                 {
                     MessageBox.Show("Something happened!");
                 }
-                
+
             }
 
             this.OnPropertyChanged("Children");
-
         }
+           
     }
 }
